@@ -6,12 +6,14 @@ import { CardMenu } from '@/components/CardMenu';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useMenu } from '@/contexts/MenuContext';
 
 export default function HomeScreen() {
   const [items,setItems]=useState([""])
   const [cargando,setCargando]=useState(true)
-  const [detalles,setDetalles]=useState({})
   const [menu,setMenu]=useState([""])
+
+  const {getDetalles}=useMenu()
   useEffect(()=>{
 
     async function getData(){
@@ -27,10 +29,7 @@ export default function HomeScreen() {
   function eliminar() {
     
   }
-  async function getDetalles(id:number) {
-    const res=await axios.get("https://api.spoonacular.com/recipes/"+id+"/information"+apiKey)
-    setDetalles(res.data)
-  }
+
 
 if (cargando) {
   return <ThemedView><ThemedText type="subtitle">Cargando...</ThemedText></ThemedView>
@@ -48,8 +47,9 @@ if (cargando) {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Menu</ThemedText>
       </ThemedView>
-        <CardMenu title={items[0].title} img={items[0].image} getDetalles={getDetalles} eliminar={eliminar} />
-      
+        <CardMenu id={items[0].id} title={items[0].title} img={items[0].image} getDetalles={getDetalles} eliminar={eliminar} />
+        <CardMenu id={items[1].id} title={items[1].title} img={items[1].image} getDetalles={getDetalles} eliminar={eliminar} />
+
     </ParallaxScrollView>
   );
 }
