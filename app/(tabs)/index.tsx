@@ -1,7 +1,6 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform ,FlatList} from 'react-native';
 import { useEffect,useState } from 'react';
-import axios from 'axios';
-import { apiKey } from "../../constants/api";
+
 import { CardMenu } from '@/components/CardMenu';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -9,32 +8,28 @@ import { ThemedView } from '@/components/ThemedView';
 import { useMenu } from '@/contexts/MenuContext';
 
 export default function HomeScreen() {
-  const [items,setItems]=useState([""])
-  const [cargando,setCargando]=useState(true)
-  const [menu,setMenu]=useState([""])
+  const {getDetalles,setMenu,menu,cantVegano,setCantVegano}=useMenu()
 
-  const {getDetalles}=useMenu()
+  const [costo,setCosto]=useState(0)
   useEffect(()=>{
-
-    async function getData(){
-      const res1=await axios.get("https://api.spoonacular.com/recipes/complexSearch"+apiKey)
-      setItems(res1.data.results)
-      setCargando(false)
-    }
-
-    getData()
-  },[])
-
-
-  function eliminar() {
+    let costos = 0;
+    let cantVeganos = 0;
+    menu.map((i:any)=>{
+      costos += i.precio;
+      console.log(i.vegano)
+      if (i.vegano) {
+      cantVeganos += 1
+    }})
+    setCantVegano(cantVeganos)
+    setCosto(costos);
     
+  },[menu])
+
+  function eliminar(id:any) {
+    setCantVegano(0)
+    setCosto(0)
+    setMenu(menu.filter((item:any)=>item.id!==id))
   }
-
-
-if (cargando) {
-  return <ThemedView><ThemedText type="subtitle">Cargando...</ThemedText></ThemedView>
-}
-
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -46,10 +41,13 @@ if (cargando) {
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Menu</ThemedText>
+        <ThemedText>Precio: ${costo}</ThemedText>
+        <ThemedText>veganos: {cantVegano}</ThemedText>
       </ThemedView>
-        <CardMenu id={items[0].id} title={items[0].title} img={items[0].image} getDetalles={getDetalles} eliminar={eliminar} />
-        <CardMenu id={items[1].id} title={items[1].title} img={items[1].image} getDetalles={getDetalles} eliminar={eliminar} />
-
+        <FlatList
+          data={menu}
+          renderItem={({item})=><CardMenu item={item} eliminar={eliminar} agregar={null} />}
+        />
     </ParallaxScrollView>
   );
 }

@@ -1,32 +1,25 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { PropsWithChildren, useState } from 'react';
 import { useNavigation, Link } from 'expo-router';
-import { apiKey } from '@/constants/api';
 import { Button, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useMenu } from '@/contexts/MenuContext';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Colors } from '@/constants/Colors';
-import axios from 'axios';
 
-export function CardMenu({ id, title, img, eliminar }: { id: any, title: string, img: string, eliminar: any }) {
-    const { setIdDetalles ,idDetalles} = useMenu();
+
+export function CardMenu({ item, eliminar,agregar }: { item:any, eliminar: any ,agregar:any}) {
+    const { setIdDetalles,listaIds } = useMenu();
     
     async function getDetalles(id: any) {
         setIdDetalles(-1);
         setIdDetalles(id);
-        
-        
-        
     }
     
     return (
         <ThemedView style={styles.container}>
             <Image style={styles.foto} 
-                source={{ uri: img }}
+                source={{ uri: item.image }}
             />
             <ThemedText style={styles.titulo}>
-                {title}
+                {item.title}
             </ThemedText>
             
             <ThemedView style={styles.containerBoton}>
@@ -35,19 +28,29 @@ export function CardMenu({ id, title, img, eliminar }: { id: any, title: string,
                     <Link href="/(tabs)/detalles" asChild>
                         <Button 
                             title='Ver Detalles'
-                            onPress={() => { getDetalles(id) }}
+                            onPress={() => { getDetalles(item.id) }}
                             color="#FDC500"
                         />
                       </Link>
 
                     </View>
+                    {eliminar!=null?
                 <View style={styles.buttonContainer}>
                     <Button 
                         title='Eliminar'
-                        onPress={eliminar}
+                        onPress={()=>{eliminar(item.id)}}
                         color="#EF233C"
                     />
                 </View>
+                :listaIds.indexOf(item.id)==-1&&
+                <View style={styles.buttonContainer}>
+                    <Button 
+                        title='Agregar'
+                        onPress={()=>{agregar(item)}}
+                        color="#B6D369"
+                    />
+                </View>
+                    }
             </ThemedView>
         </ThemedView>
     );

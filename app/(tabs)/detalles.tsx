@@ -18,6 +18,8 @@ export default function TabTwoScreen() {
          async function getData() {
               const res=await axios.get("https://api.spoonacular.com/recipes/"+idDetalles+"/information"+apiKey)
              setDetalles(res.data)
+             console.log(res.data);
+             
              setCargando(false)
       
          }
@@ -32,13 +34,20 @@ export default function TabTwoScreen() {
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       <ThemedView>
-        <ThemedText>Tiempo de preparación: {detalles.cookingMinutes}</ThemedText>
+        <Image style={styles.foto}  source={{ uri: detalles.image }}></Image>
+        <ThemedText>{detalles.title}</ThemedText>
         {detalles.vegetarian && <ThemedText>-vegetariano</ThemedText>}
         {detalles.vegan && <ThemedText>-vegano</ThemedText>}
         {detalles.glutenFree && <ThemedText>-libre de gluten</ThemedText>}
         {detalles.diaryFree && <ThemedText>-libre de lactosa</ThemedText>}
         {detalles.cheap && <ThemedText>-barato</ThemedText>}
         <ThemedText>Puntaje de salud: {detalles.healthScore}</ThemedText>
+        <br></br>
+        <ThemedText>Ingredientes:</ThemedText>
+        <FlatList
+          data={detalles.extendedIngredients}
+          renderItem={({item})=><ThemedText>-{item.nameClean}</ThemedText>}
+        />
 
 
 
@@ -58,4 +67,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+  foto:{
+     height: 175,
+        width: 280,
+        borderRadius: 20
+  }
 });
