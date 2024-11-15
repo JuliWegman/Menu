@@ -8,7 +8,7 @@ import { useEffect ,useState} from 'react';
 import { apiKey } from '@/constants/api';
 import { FlatList } from 'react-native-gesture-handler';
 
-export default function BotonesCard({getDetalles,setModal,eliminar,agregar,item}:{getDetalles:any,setModal:any,eliminar:any,agregar:any,item:any}) {
+export default function BotonesCard({getDetalles,setModal,eliminar,agregar,item,setItemDetalle}:{getDetalles:any,setModal:any,eliminar:any,agregar:any,item:any,setItemDetalle:any}) {
     const { setListaIds,listaIds } = useMenu();
     
     return(
@@ -17,7 +17,7 @@ export default function BotonesCard({getDetalles,setModal,eliminar,agregar,item}
                 <View style={styles.buttonContainer}>
                     <Button 
                         title='Ver Detalles'
-                        onPress={() => { getDetalles(item.id) ;setModal()}}
+                        onPress={() => { getDetalles(item.id); setModal(true); setItemDetalle(item)}}
                         color="#E7BB41"
                     />
 
@@ -29,7 +29,8 @@ export default function BotonesCard({getDetalles,setModal,eliminar,agregar,item}
                     title='Eliminar'
                     onPress={()=>{
                         eliminar(item.id);
-                        setListaIds(listaIds.filter((i:any)=>i!==item.id)); 
+                        setListaIds(listaIds.filter((i:any)=>i!==item.id));
+                         
                         setModal(false)
                     }}
                     color="#E3170A"
@@ -50,12 +51,7 @@ export default function BotonesCard({getDetalles,setModal,eliminar,agregar,item}
 }
 
 const styles = StyleSheet.create({
-    headerImage: {
-      color: '#808080',
-      bottom: -90,
-      left: -35,
-      position: 'absolute',
-    },
+
     botones:{
       display:'flex',
       flexDirection:'row'
@@ -66,27 +62,8 @@ const styles = StyleSheet.create({
       elevation: 2,
       margin:5,
     },
-    buttonClose: {
-      backgroundColor: '#2196F3',
-    },
-    modalView:{
-      margin: 20,
-      backgroundColor: 'white',
-      borderRadius: 20,
-      padding: 35,
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-  },
     container: {
         display: 'flex',
-        backgroundColor: '#f5f5f5',
         width: 300,
         justifyContent: 'center',
         alignItems: 'center',
@@ -100,10 +77,10 @@ const styles = StyleSheet.create({
         width: 280,
     },
     containerBoton: {
+        backgroundColor:'',
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: 300,
-        backgroundColor: '#F4F4F8',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         marginTop: 10,

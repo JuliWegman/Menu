@@ -1,12 +1,11 @@
-import { useNavigation, Link } from 'expo-router';
-import { Button, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, Image, StyleSheet} from 'react-native';
 import { useMenu } from '@/contexts/MenuContext';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import BotonesCard from './BotonesCard';
 
-export function CardMenu({ item, eliminar,agregar,setModal }: { item:any, eliminar: any ,agregar:any,setModal:any}) {
-    const { setIdDetalles,listaIds } = useMenu();
+export function CardMenu({ item, eliminar,agregar,setModal,setItemDetalle }: { item:any, eliminar: any ,agregar:any,setModal:any,setItemDetalle:any}) {
+    const { setIdDetalles } = useMenu();
 
     async function getDetalles(id: any) {
         setIdDetalles(-1);
@@ -21,7 +20,7 @@ export function CardMenu({ item, eliminar,agregar,setModal }: { item:any, elimin
             <ThemedText style={styles.titulo}>
                 {item.title}
             </ThemedText>
-            <BotonesCard getDetalles={getDetalles} agregar={agregar} eliminar={eliminar} setModal={setModal} item={item}/>
+            <BotonesCard getDetalles={getDetalles} agregar={agregar} eliminar={eliminar} setModal={setModal} item={item} setItemDetalle={setItemDetalle}/>
             
         </ThemedView>
     );

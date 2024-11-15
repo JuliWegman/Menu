@@ -1,4 +1,3 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Modal, StyleSheet,TextInput,Image} from 'react-native';
 import { useState ,useEffect} from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -10,6 +9,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { CardMenu } from '@/components/CardMenu';
 import { useMenu } from '@/contexts/MenuContext';
 import Detalle from '../../components/Detalle'
+import { View } from 'react-native-reanimated/lib/typescript/Animated';
 
 export default function TabTwoScreen() {
   const [query,setQuery]=useState("")
@@ -83,13 +83,14 @@ export default function TabTwoScreen() {
         />
       }>
          <Modal
-          animationType="slide"
           transparent={true}
           visible={modal}
           onRequestClose={() => {
           setModal(!modal);
           }}>
+            <ThemedView style={styles.modal}>
             <Detalle setModal={setModal} agregar={agregar} eliminar={null} item={itemDetalle}/>
+            </ThemedView>
           </Modal>
       <ThemedView>
       <TextInput
@@ -101,7 +102,7 @@ export default function TabTwoScreen() {
         {items.length>0 ?
         <FlatList
           data={items}
-          renderItem={({item})=><CardMenu item={item} agregar={agregar} eliminar={null} setModal={()=>{setModal(true);setItemDetalle(item);}}/>}
+          renderItem={({item})=><CardMenu item={item} agregar={agregar} eliminar={null} setModal={setModal} setItemDetalle={setItemDetalle}/>}
         />
         :
         <ThemedText>No se encuentran platos</ThemedText>
@@ -136,6 +137,13 @@ const styles = StyleSheet.create({
       borderColor: '#141414',
       padding:'5%'
 
+  },
+  modal:{
+    height:'100%',
+    overflow:'scroll',
+    backgroundColor: '#14141450',
+
+    
   },
   titleContainer: {
     flexDirection: 'row',

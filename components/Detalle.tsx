@@ -48,11 +48,12 @@ export default function Detalle({setModal,eliminar,agregar,item}:{setModal:any,e
           renderItem={({item})=><ThemedText>-{item.nameClean}</ThemedText>}
         />
 
-        <BotonesCard getDetalles={null} agregar={agregar} eliminar={eliminar} setModal={setModal} item={item}/>
+        <BotonesCard getDetalles={null} agregar={agregar} eliminar={eliminar} setModal={setModal} item={item} setItemDetalle={setModal}/>
 
         <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => setModal(false)}>
+            
         X </Pressable>
         </ThemedView>
 
@@ -65,10 +66,6 @@ const styles = StyleSheet.create({
     bottom: -90,
     left: -35,
     position: 'absolute',
-  },
-  botones:{
-    display:'flex',
-    flexDirection:'row'
   },
   button: {
     height: 30,

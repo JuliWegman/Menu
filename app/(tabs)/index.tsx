@@ -32,10 +32,12 @@ export default function HomeScreen() {
   },[menu])
 
   function eliminar(id:any) {
+    console.log(id);
     setCantVegano(0)
     setCosto(0)
     setPuntajeSalud(0)
     setMenu(menu.filter((item:any)=>item.id!==id))
+    
   }
   return (
     <ParallaxScrollView
@@ -46,25 +48,32 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
+
         <Modal
-          animationType="slide"
           transparent={true}
           visible={modal}
           onRequestClose={() => {
           setModal(!modal);
           }}>
-            <Detalle setModal={setModal} eliminar={eliminar} agregar={null} item={itemDetalle}/>
-          </Modal>
-          <ThemedText type="title">Menu</ThemedText>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText>Precio: ${costo}</ThemedText>
-        <ThemedText>Veganos: {cantVegano}</ThemedText>
-        <ThemedText>Promedio salud: {puntajeSalud}</ThemedText>
+            <ThemedView style={styles.modal}>
 
-      </ThemedView>
+              <Detalle setModal={setModal} eliminar={eliminar} agregar={null} item={itemDetalle}/>
+            </ThemedView>
+
+        </Modal>
+
+
+        <ThemedText type="title">Menu</ThemedText>
+
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText>Precio: ${costo}</ThemedText>
+          <ThemedText>Veganos: {cantVegano}</ThemedText>
+          <ThemedText>Promedio salud: {puntajeSalud}</ThemedText>
+
+        </ThemedView>
         <FlatList
           data={menu}
-          renderItem={({item})=><CardMenu item={item} eliminar={eliminar} agregar={null} setModal={()=>{setModal(true);setItemDetalle(item)}}/>}
+          renderItem={({item})=><CardMenu item={item} eliminar={eliminar} agregar={null} setModal={setModal} setItemDetalle={setItemDetalle}/>}
         />
     </ParallaxScrollView>
   );
@@ -92,5 +101,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  modal:{
+    height:'100%',
+    overflow:'scroll',
+    backgroundColor: '#14141450',
+
+    
   },
 });
