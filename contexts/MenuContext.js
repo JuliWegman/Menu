@@ -11,9 +11,10 @@ export const ContextProvider = ({children}) => {
     const [menu,setMenu]=useState([])
     const [listaIds,setListaIds]=useState([""])
     const [cantVegano,setCantVegano]=useState(0)
+    const [puntajeSalud,setPuntajeSalud]=useState(0)
     
    
-    const value = {menu,setMenu, detalles,setDetalles,idDetalles,setIdDetalles,listaIds,setListaIds,cantVegano,setCantVegano};
+    const value = {puntajeSalud,setPuntajeSalud,menu,setMenu, detalles,setDetalles,idDetalles,setIdDetalles,listaIds,setListaIds,cantVegano,setCantVegano};
 
     return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;
 };

@@ -26,15 +26,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="detalles"
-        options={{
-          title: 'detalles',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'star' : 'star-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="explore"
         options={{
           title: 'Buscar',

@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Platform ,FlatList} from 'react-native';
+import { Image, StyleSheet, Platform ,FlatList,Modal} from 'react-native';
 import { useEffect,useState } from 'react';
-
+import Detalle from '@/components/Detalle';
 import { CardMenu } from '@/components/CardMenu';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -8,26 +8,32 @@ import { ThemedView } from '@/components/ThemedView';
 import { useMenu } from '@/contexts/MenuContext';
 
 export default function HomeScreen() {
-  const {getDetalles,setMenu,menu,cantVegano,setCantVegano}=useMenu()
+  const [modal,setModal]=useState(false)
+  const [itemDetalle,setItemDetalle]=useState({});
+
+  const {setMenu,menu,cantVegano,setCantVegano,puntajeSalud,setPuntajeSalud,listaIds }=useMenu()
 
   const [costo,setCosto]=useState(0)
   useEffect(()=>{
     let costos = 0;
     let cantVeganos = 0;
+    let puntaje=0
     menu.map((i:any)=>{
+      puntaje+=i.puntaje;
       costos += i.precio;
-      console.log(i.vegano)
       if (i.vegano) {
-      cantVeganos += 1
+      cantVeganos += 1;
     }})
     setCantVegano(cantVeganos)
     setCosto(costos);
+    setPuntajeSalud(puntaje/menu.length || 0)
     
   },[menu])
 
   function eliminar(id:any) {
     setCantVegano(0)
     setCosto(0)
+    setPuntajeSalud(0)
     setMenu(menu.filter((item:any)=>item.id!==id))
   }
   return (
@@ -35,18 +41,29 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require('@/assets/images/comida.jpg')}
           style={styles.reactLogo}
         />
       }>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modal}
+          onRequestClose={() => {
+          setModal(!modal);
+          }}>
+            <Detalle setModal={setModal} eliminar={eliminar} agregar={null} item={itemDetalle}/>
+          </Modal>
+          <ThemedText type="title">Menu</ThemedText>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Menu</ThemedText>
         <ThemedText>Precio: ${costo}</ThemedText>
-        <ThemedText>veganos: {cantVegano}</ThemedText>
+        <ThemedText>Veganos: {cantVegano}</ThemedText>
+        <ThemedText>Promedio salud: {puntajeSalud}</ThemedText>
+
       </ThemedView>
         <FlatList
           data={menu}
-          renderItem={({item})=><CardMenu item={item} eliminar={eliminar} agregar={null} />}
+          renderItem={({item})=><CardMenu item={item} eliminar={eliminar} agregar={null} setModal={()=>{setModal(true);setItemDetalle(item)}}/>}
         />
     </ParallaxScrollView>
   );
@@ -54,17 +71,23 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   titleContainer: {
+    height: 60,
+    padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 8,
+    borderWidth: 2,
+    borderColor: '#141414',
+    borderRadius: 20,
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
+    height: 300,
+    width: 380,
     bottom: 0,
     left: 0,
     position: 'absolute',
