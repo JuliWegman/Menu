@@ -30,6 +30,7 @@ export default function BotonesCard({getDetalles,setModal,eliminar,agregar,item}
                     onPress={()=>{
                         eliminar(item.id);
                         setListaIds(listaIds.filter((i:any)=>i!==item.id)); 
+                        setModal(false)
                     }}
                     color="#E3170A"
                 />

@@ -26,7 +26,8 @@ export default function HomeScreen() {
     }})
     setCantVegano(cantVeganos)
     setCosto(costos);
-    setPuntajeSalud(puntaje/menu.length || 0)
+    
+    setPuntajeSalud((puntaje/menu.length).toFixed(2) || 0)
     
   },[menu])
 
